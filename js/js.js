@@ -65,7 +65,7 @@ itemsArray.forEach(function(item, k){
       x: output.x.current - (output.x.current * depth)
     }
     console.log(k, 'depth', depth)
-    item.style.transform = 'translate('+output.x.current+'px, '+output.y.current+'px)';
+    item.style.transform = 'translate('+itemOutput.x+'px, '+output.y.current+'px)';
 });
 
 
