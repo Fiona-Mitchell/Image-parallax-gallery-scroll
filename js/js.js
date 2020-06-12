@@ -61,6 +61,9 @@ output.y.current = output.y.start + (input.mouseY.fraction * output.y.range)
 //apply output to html
 itemsArray.forEach(function(item, k){
     var depth = parseFloat(item.dataset.depth, 10);
+    var itemOutput = {
+      x: output.x.current - (output.x.current * depth)
+    }
     console.log(k, 'depth', depth)
     item.style.transform = 'translate('+output.x.current+'px, '+output.y.current+'px)';
 });
