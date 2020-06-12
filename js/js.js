@@ -34,44 +34,65 @@ var output = {
     end: 150,
     current: 0,
   },
+  zIndex: {
+    range: 10000
+  },
+  scale: {
+    start: 1,
+    end: 0.2,
+  }
 };
 
 // This is output set up
+output.scale.range = output.scale.end - output.scale.start;
 output.x.range = output.x.end - output.x.start;
 output.y.range = output.y.end - output.y.start;
 
+var mouse = {
+  x: window.innerWidth * .5,
+  y: window.innerHeight * .5,
+}
 
-
-var handleMouseMove = function (event) {
+var updateInputs = function () {
   // mouse x input
-  input.mouseX.current = event.clientX;
+  input.mouseX.current = mouse.x;
   input.mouseX.fraction = (input.mouseX.current - input.mouseX.start) / input.mouseX.range;
-// mouse y input
-  input.mouseY.current = event.clientY;
+
+  // mouse y input
+  input.mouseY.current = mouse.y;
   input.mouseY.fraction = (input.mouseY.current - input.mouseY.start) / input.mouseY.range;
+}
 
-// connect input to ouput
+var updateOutputs = function () {
+  // output x and y
+  output.x.current = output.x.end - (input.mouseX.fraction * output.x.range);
+  output.y.current = output.y.end - (input.mouseY.fraction * output.y.range);
+}
 
-// output x
-output.x.current = output.x.start + (input.mouseX.fraction * output.x.range)
 
-// output y
-output.y.current = output.y.start + (input.mouseY.fraction * output.y.range)
-
-//apply output to html
-itemsArray.forEach(function(item, k){
+var updateEachParallaxItem = function () {
+  // apply output to html
+  itemsArray.forEach(function (item, k) {
     var depth = parseFloat(item.dataset.depth, 10);
     var itemOutput = {
       x: output.x.current - (output.x.current * depth),
-      y: output.y.current - (output.y.current * depth)
-    }
-    console.log(k, 'depth', depth)
-    item.style.transform = 'translate('+itemOutput.x+'px, '+itemOutput.y+'px)';
-});
+      y: output.y.current - (output.y.current * depth),
+      zIndex: output.zIndex.range - (output.zIndex.range * depth),
+      scale: output.scale.start + (output.scale.range * depth),
+      };
+      console.log(k, 'depth', depth)
+      item.style.zIndex = itemOutput.zIndex;
+      item.style.transform = 'scale('+itemOutput.scale+') translate('+itemOutput.x+'px, '+itemOutput.y+'px)';
+    });
+  }
 
+var handleMouseMove = function (event) {
+  mouse.x = event.clientX;
+  mouse.y = event.clientY;
 
-// console.log('output.x.current', output.x.current)
-// console.log('fractionY', input.mouseY.fraction)}
+  updateInputs();
+  updateOutputs();
+  updateEachParallaxItem();
 }
 
 var handleResize = function () {
@@ -84,5 +105,9 @@ var handleResize = function () {
 
 
 
-window.addEventListener('mousemove', handleMouseMove)
-window.addEventListener('resize', handleResize)
+window.addEventListener('mousemove', handleMouseMove);
+window.addEventListener('resize', handleResize);
+
+updateInputs();
+updateOutputs();
+updateEachParallaxItem();
