@@ -30,8 +30,8 @@ var output = {
   current: 0,
 },
   y: {
-    start: -350,
-    end: 350,
+    start: -200,
+    end: 200,
     current: 0,
   },
   zIndex: {
