@@ -25,8 +25,8 @@ input.mouseY.range = input.mouseY.end - input.mouseY.start;
 // This is an output set up
 var output = {
   x: {
-  start: -350,
-  end: 350,
+  start: -500,
+  end: 500,
   current: 0,
 },
   y: {
